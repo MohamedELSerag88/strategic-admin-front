@@ -26,17 +26,12 @@ const nextConfig = {
       },
     ];
   },
-  server:{
-    proxy:{
-      api:'http://strategic.local'
-    }
-  },
   env: {
-    BackEndPoint: 'http://strategic.local',
+    BackEndPoint: 'https://backend.strategicmediacenter.com',
   },
   reactStrictMode: true,
   images: {
-    domains: ['via.placeholder.com','strategic.local'],
+    domains: ['via.placeholder.com','strategic.local','backend.strategicmediacenter.com'],
   },
   typescript: {
     ignoreBuildErrors: true,
