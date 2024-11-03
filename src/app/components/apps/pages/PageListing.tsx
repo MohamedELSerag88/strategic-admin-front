@@ -292,13 +292,16 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <FormLabel>Content</FormLabel>
-                  <TextareaAutosize
-                    id="contnet"
-                    fullWidth
-                    value={values.content}
-                    onChange={(e) =>
-                      setValues({ ...values, content: e.target.value })
-                    }
+                  <CustomTextField
+                      id="contnet"
+                      multiline
+                      rows={6}
+                      variant="outlined"
+                      value={values.content}
+                      onChange={(e) =>
+                          setValues({ ...values, content: e.target.value })
+                      }
+                      fullWidth
                   />
                 </Grid>
 
@@ -354,13 +357,17 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <FormLabel>Content</FormLabel>
-                  <TextareaAutosize
-                    id="content"
-                    fullWidth
-                    value={editValues.content}
-                    onChange={(e) =>
-                      setEditValues({ ...editValues, content: e.target.value })
-                    }
+
+                  <CustomTextField
+                      id="content"
+                      multiline
+                      rows={6}
+                      variant="outlined"
+                      value={values.content}
+                      onChange={(e) =>
+                          setEditValues({ ...editValues, content: e.target.value })
+                      }
+                      fullWidth
                   />
                 </Grid>
 

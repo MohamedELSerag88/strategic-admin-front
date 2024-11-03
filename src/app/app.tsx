@@ -10,7 +10,7 @@ import { AppState } from "@/store/store";
 import "@/utils/i18n";
 import "@/app/api/index";
 import {ToastContainer} from "react-toastify";
-
+import "react-toastify/dist/ReactToastify.css";
 
 const MyApp = ({ children }: { children: React.ReactNode }) => {
     const theme = ThemeSettings();
