@@ -35,7 +35,7 @@ const Logo = () => {
           />
         ) : (
           <Image
-            src={"/images/logos/mina-logo.png"}
+            src={"/images/logos/mina-logo.jpg"}
             alt="logo"
             height={customizer.TopbarHeight}
             priority
