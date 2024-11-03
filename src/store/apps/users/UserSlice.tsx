@@ -90,7 +90,6 @@ export const fetchUsers =
     page: number,
     rowsPerPage: number,
     status: number | null,
-    clientId: number | null,
     search: string
   ) =>
   async (dispatch: AppDispatch) => {
@@ -98,7 +97,6 @@ export const fetchUsers =
       let appUrl = `${API_URL}` + "?page=" + page + "&per_page=" + rowsPerPage;
       if (search) appUrl = appUrl + "&keyword=" + search;
       if (status === 1 || status === 0) appUrl = appUrl + "&status=" + status;
-      if (clientId > 0) appUrl = appUrl + "&client_id=" + clientId;
       const response = await ApiService("get", appUrl, null, {
         Authorization: "Bearer " + localStorage.getItem("token"),
       });

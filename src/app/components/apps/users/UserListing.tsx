@@ -44,9 +44,7 @@ const UserListing = () => {
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [statusFilter, setStatusFilter] = React.useState(-1);
-  const [clientIdFilter, setClientIdFilter] = React.useState(-1);
   const [search, setSearch] = React.useState("");
-  const [clients, setClients] = React.useState([]);
 
   const [editModal, setEditModal] = React.useState(false);
 
@@ -109,16 +107,9 @@ const UserListing = () => {
 
   useEffect(() => {
     dispatch(
-      fetchUsers(page, rowsPerPage, statusFilter, clientIdFilter, search)
+      fetchUsers(page, rowsPerPage, statusFilter, search)
     );
-    const fetchClientsAsync = async () => {
-      const data = await ApiService("get", "/admin/v1/dropdown/client", null, {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      });
-      setClients(data.data);
-    };
-    fetchClientsAsync();
-  }, [dispatch, page, rowsPerPage, statusFilter, clientIdFilter, search]);
+  }, [dispatch, page, rowsPerPage, statusFilter, search]);
 
   const handleChangePage = (event: any) => {
     var newPage = event.target.textContent;
@@ -132,18 +123,15 @@ const UserListing = () => {
     }
     setPage(newPage);
     dispatch(
-      fetchUsers(newPage, rowsPerPage, statusFilter, clientIdFilter, search)
+      fetchUsers(newPage, rowsPerPage, statusFilter, search)
     );
   };
 
   const handleStatusChange = (status: number | null) => {
     setStatusFilter(status);
-    dispatch(fetchUsers(page, rowsPerPage, status, clientIdFilter, search));
+    dispatch(fetchUsers(page, rowsPerPage, status, search));
   };
-  const handleRoleChange = (clientId: number) => {
-    setClientIdFilter(clientId);
-    dispatch(fetchUsers(page, rowsPerPage, statusFilter, clientId, search));
-  };
+
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -153,7 +141,6 @@ const UserListing = () => {
         page,
         parseInt(event.target.value, 10),
         statusFilter,
-        clientIdFilter,
         search
       )
     );
@@ -170,7 +157,7 @@ const UserListing = () => {
   const handelSearchKey = (userSearch: string) => {
     setSearch(userSearch);
     dispatch(
-      fetchUsers(page, rowsPerPage, statusFilter, clientIdFilter, userSearch)
+      fetchUsers(page, rowsPerPage, statusFilter, userSearch)
     );
   };
   const users = useSelector((state) =>
