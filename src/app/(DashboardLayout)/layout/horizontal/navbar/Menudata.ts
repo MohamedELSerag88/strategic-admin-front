@@ -31,6 +31,21 @@ const Menuitems = [
     icon: IconPoint,
     href: "/pages",
     chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Categories",
+    icon: IconPoint,
+    href: "/categories",
+    chipColor: "secondary",
+  }
+  ,
+  {
+    id: uniqueId(),
+    title: "Experts",
+    icon: IconPoint,
+    href: "/experts",
+    chipColor: "secondary",
   }
 
 ];

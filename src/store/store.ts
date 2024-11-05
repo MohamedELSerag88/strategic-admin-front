@@ -9,6 +9,8 @@ import AdminReducer from "./apps/admins/AdminSlice";
 import RoleReducer from "./apps/roles/RoleSlice";
 import UserReducer from "./apps/users/UserSlice";
 import PageReducer from "./apps/pages/PageSlice";
+import CategoryReducer from "./apps/categories/CategorySlice";
+import ExpertReducer from "./apps/experts/ExpertSlice";
 
 const persistConfig = {
   key: "root",
@@ -22,7 +24,9 @@ export const store = configureStore({
     adminReducer: AdminReducer,
     roleReducer: RoleReducer,
     pageReducer: PageReducer,
-    userReducer: UserReducer
+    userReducer: UserReducer,
+    categoryReducer: CategoryReducer,
+    expertReducer: ExpertReducer
 
   },
   devTools: process.env.NODE_ENV !== "develop",
@@ -36,7 +40,9 @@ const rootReducer = combineReducers({
   adminReducer: AdminReducer,
   roleReducer: RoleReducer,
   userReducer: UserReducer,
-  pageReducer: PageReducer
+  pageReducer: PageReducer,
+  categoryReducer: CategoryReducer,
+  expertReducer: ExpertReducer
 });
 
 export const persistor = persistStore(store);

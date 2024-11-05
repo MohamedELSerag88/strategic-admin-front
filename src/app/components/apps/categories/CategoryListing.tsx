@@ -20,12 +20,12 @@ import {
   useTheme, TextareaAutosize,
 } from "@mui/material";
 import {
-  fetchPages,
-  DeletePage,
-  addPage,
-  updatePage,
-  getPage,
-} from "@/store/apps/pages/PageSlice";
+  fetchCategories,
+  DeleteCategory,
+  addCategory,
+  updateCategory,
+  getCategory,
+} from "@/store/apps/categories/CategorySlice";
 import { IconTrash } from "@tabler/icons-react";
 import { PageType } from "@/app/(DashboardLayout)/types/apps/page";
 import CustomFormLabel from "@/app/components/forms/theme-elements/CustomFormLabel";
@@ -36,8 +36,8 @@ import { IconPencil } from "@tabler/icons-react";
 import CustomTable from "@/app/components/shared/CustomTable";
 import Loader from "@/app/components/shared/Loader";
 
-const PageListing = ({ toggleModal, onActionButtonClick }) => {
-  const rowsHeaderText = ["Id", "Name","slug"];
+const CategoryListing = ({ toggleModal, onActionButtonClick }) => {
+  const rowsHeaderText = ["Id", "Name"];
   const dispatch = useDispatch();
   const theme = useTheme();
   const [page, setPage] = React.useState(1);
@@ -53,63 +53,58 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
     setEditModal(!editModal);
   };
   const [values, setValues] = React.useState({
-    name: "",
-    content: ""
+    name: ""
   });
   const [editValues, setEditValues] = React.useState({
     id: null,
-    name: "",
-    content: ""
+    name: ""
   });
 
-  const handleAddPages = (e: any) => {
+  const handleAddCategory = (e: any) => {
     e.preventDefault();
     var payload = {
       name: values.name,
-      content: values.content,
     };
-    dispatch(addPage(payload));
+    dispatch(addCategory(payload));
     onActionButtonClick();
   };
-  const handleEditPage = async (pageId: number) => {
+  const handleEditCategory = async (pageId: number) => {
     try {
       const response = await ApiService(
         "get",
-        "/admin/v1/pages/" + pageId,
+        "/admin/v1/categories/" + pageId,
         null,
         {
           Authorization: "Bearer " + localStorage.getItem("token"),
         }
       );
-      editPage(response.data);
+      editCategory(response.data);
     } catch (e) {
       console.log(e);
     }
   };
-  const editPage = (pageRow) => {
+  const editCategory = (pageRow) => {
     setEditValues({
       id: pageRow.id,
-      name: pageRow.name,
-      content: pageRow.content
+      name: pageRow.name
     });
     setEditModal(!editModal);
   };
-  const handleUpdatePages = (e: any) => {
+  const handleUpdateCategories = (e: any) => {
     e.preventDefault();
     var payload = {
       id: editValues.id,
       name: editValues.name,
-      content: editValues.content,
 
     };
-    dispatch(updatePage(payload));
+    dispatch(updateCategory(payload));
 
     setEditModal(!editModal);
   };
 
   useEffect(() => {
     dispatch(
-      fetchPages(page, rowsPerPage, search)
+      fetchCategories(page, rowsPerPage, search)
     );
 
   }, [dispatch, page, rowsPerPage, search]);
@@ -126,14 +121,14 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
     }
     setPage(newPage);
     dispatch(
-        fetchPages(newPage, rowsPerPage, search)
+        fetchCategories(newPage, rowsPerPage, search)
     );
   };
 
   const handleStatusChange = (status: number | null) => {
     // @ts-ignore
     setStatusFilter(status);
-    dispatch(fetchPages(page, rowsPerPage , search));
+    dispatch(fetchCategories(page, rowsPerPage , search));
   };
 
 
@@ -141,7 +136,7 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     dispatch(
-        fetchPages(
+        fetchCategories(
         page,
         parseInt(event.target.value, 10),
         search
@@ -157,23 +152,23 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
   ) => {
     return pages;
   };
-  const handelSearchKey = (pageSearch: string) => {
-    setSearch(pageSearch);
+  const handelSearchKey = (categorySearch: string) => {
+    setSearch(categorySearch);
     dispatch(
-        fetchPages(page, rowsPerPage, pageSearch)
+        fetchCategories(page, rowsPerPage, categorySearch)
     );
   };
   const pages = useSelector((state) =>
     getVisiblePages(
-      state.pageReducer.pages,
-      state.pageReducer.pageCount,
-      state.pageReducer.pageSearch,
+      state.categoryReducer.categories,
+      state.categoryReducer.pageCount,
+      state.categoryReducer.categorySearch,
       rowsPerPage,
       page
     )
   );
   const totalRows = Math.ceil(
-    useSelector((state) => state.pageReducer.pageCount / rowsPerPage)
+    useSelector((state) => state.categoryReducer.pageCount / rowsPerPage)
   );
 
   const emptyRows =
@@ -213,21 +208,15 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                   </Typography>
                 </Box>
               </TableCell>
-              <TableCell>
-                <Box>
-                  <Typography variant="h6" fontWeight={600} noWrap>
-                    {page.slug}
-                  </Typography>
-                </Box>
-              </TableCell>
+
               <TableCell align="right">
                 <Tooltip title="Delete Page">
-                  <IconButton onClick={() => dispatch(DeletePage(page.id))}>
+                  <IconButton onClick={() => dispatch(DeleteCategory(page.id))}>
                     <IconTrash size="18" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Edit">
-                  <IconButton onClick={(e) => handleEditPage(page.id)}>
+                  <IconButton onClick={(e) => handleEditCategory(page.id)}>
                     <IconPencil size="18" stroke={1.3} />
                   </IconButton>
                 </Tooltip>
@@ -258,7 +247,7 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
           }}
         >
           <Typography variant="h3" fontWeight={"400"}>
-            No Pages
+            No Categories
           </Typography>
         </TableBody>
       )}
@@ -270,11 +259,11 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" variant="h5">
-          {"Add New Page"}
+          {"Add New Category"}
         </DialogTitle>
         <DialogContent>
           <Box mt={3}>
-            <form onSubmit={handleAddPages}>
+            <form onSubmit={handleAddCategory}>
               <Grid spacing={3} container>
                 <Grid item xs={12} lg={6}>
                   <FormLabel>Name</FormLabel>
@@ -289,22 +278,6 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                     }
                   />
                 </Grid>
-                <Grid item xs={12} lg={6}>
-                  <FormLabel>Content</FormLabel>
-                  <CustomTextField
-                      id="contnet"
-                      multiline
-                      rows={6}
-                      variant="outlined"
-                      value={values.content}
-                      onChange={(e) =>
-                          setValues({ ...values, content: e.target.value })
-                      }
-                      fullWidth
-                  />
-                </Grid>
-
-
                 <Grid item xs={12} lg={12}>
                   <Button
                     variant="contained"
@@ -312,8 +285,7 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                     sx={{ mr: 1 }}
                     type="submit"
                     disabled={
-                      values.name.length === 0 ||
-                      values.content.length === 0
+                      values.name.length === 0
                     }
                   >
                     Submit
@@ -335,11 +307,11 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" variant="h5">
-          {"Edit Page"}
+          {"Edit Category"}
         </DialogTitle>
         <DialogContent>
           <Box mt={3}>
-            <form onSubmit={handleUpdatePages}>
+            <form onSubmit={handleUpdateCategories}>
               <Grid spacing={3} container>
                 <Grid item xs={12} lg={6}>
                   <FormLabel>Name</FormLabel>
@@ -354,22 +326,6 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                     }
                   />
                 </Grid>
-                <Grid item xs={12} lg={6}>
-                  <FormLabel>Content</FormLabel>
-
-                  <CustomTextField
-                      id="content"
-                      multiline
-                      rows={6}
-                      variant="outlined"
-                      value={values.content}
-                      onChange={(e) =>
-                          setEditValues({ ...editValues, content: e.target.value })
-                      }
-                      fullWidth
-                  />
-                </Grid>
-
 
 
                 <Grid item xs={12} lg={12}>
@@ -379,8 +335,7 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
                     sx={{ mr: 1 }}
                     type="submit"
                     disabled={
-                      editValues.name.length === 0 ||
-                      editValues.content.length === 0
+                      editValues.name.length === 0
                     }
                   >
                     Submit
@@ -402,4 +357,4 @@ const PageListing = ({ toggleModal, onActionButtonClick }) => {
   );
 };
 
-export default PageListing;
+export default CategoryListing;

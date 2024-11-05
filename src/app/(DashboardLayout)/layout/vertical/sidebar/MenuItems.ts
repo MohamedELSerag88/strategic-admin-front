@@ -15,7 +15,7 @@ import {
   IconBolt,
   IconBriefcase,
   IconListCheck,
-  IconSend,
+  IconSend, IconPoint,
 } from "@tabler/icons-react";
 interface MenuitemsType {
   id?: string;
@@ -54,6 +54,20 @@ const Menuitems: (MenuitemsType | undefined)[] = [
     title: "Pages",
     icon: IconUsers,
     href: "/pages",
+    chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Categories",
+    icon: IconUsers,
+    href: "/categories",
+    chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Experts",
+    icon: IconPoint,
+    href: "/experts",
     chipColor: "secondary",
   }
 ];
