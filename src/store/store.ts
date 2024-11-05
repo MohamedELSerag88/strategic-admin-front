@@ -11,6 +11,7 @@ import UserReducer from "./apps/users/UserSlice";
 import PageReducer from "./apps/pages/PageSlice";
 import CategoryReducer from "./apps/categories/CategorySlice";
 import ExpertReducer from "./apps/experts/ExpertSlice";
+import ConsultationReducer from "./apps/consultations/ConsultationSlice";
 
 const persistConfig = {
   key: "root",
@@ -26,7 +27,8 @@ export const store = configureStore({
     pageReducer: PageReducer,
     userReducer: UserReducer,
     categoryReducer: CategoryReducer,
-    expertReducer: ExpertReducer
+    expertReducer: ExpertReducer,
+    consultationReducer: ConsultationReducer
 
   },
   devTools: process.env.NODE_ENV !== "develop",
@@ -42,7 +44,8 @@ const rootReducer = combineReducers({
   userReducer: UserReducer,
   pageReducer: PageReducer,
   categoryReducer: CategoryReducer,
-  expertReducer: ExpertReducer
+  expertReducer: ExpertReducer,
+  consultationReducer: ConsultationReducer
 });
 
 export const persistor = persistStore(store);

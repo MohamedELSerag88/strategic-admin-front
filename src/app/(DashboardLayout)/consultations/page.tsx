@@ -2,7 +2,7 @@
 
 import Breadcrumb from "@/app/(DashboardLayout)/layout/shared/breadcrumb/Breadcrumb";
 import PageContainer from "@/app/components/container/PageContainer";
-import ExpertListing from "@/app/components/apps/experts/ExpertListing";
+import ConsultationListing from "@/app/components/apps/consultations/ConsultationsListing";
 import ChildCard from "@/app/components/shared/ChildCard";
 import { useState } from "react";
 
@@ -12,26 +12,26 @@ const BCrumb = [
     title: "Home",
   },
   {
-    title: "Experts",
+    title: "Consultations",
   },
 ];
 
-const ExpertsList = () => {
+const ConsultationsList = () => {
   const [toggleModal, setToggleModal] = useState(false);
 
   const onActionButtonClick = () => setToggleModal(!toggleModal);
 
   return (
-    <PageContainer title="Pages" description="this is Expert">
+    <PageContainer title="Pages" description="this is Consultation">
       <Breadcrumb
-        title="Experts"
+        title="Consultations"
         items={BCrumb}
         showActionButton
         onActionButtonClick={onActionButtonClick}
-        actionButtonText="Add New Expert"
+        actionButtonText="Add New Consultation"
       />
       <ChildCard>
-        <ExpertListing
+        <ConsultationListing
           toggleModal={toggleModal}
           onActionButtonClick={onActionButtonClick}
         />
@@ -40,4 +40,4 @@ const ExpertsList = () => {
   );
 };
 
-export default ExpertsList;
+export default ConsultationsList;
