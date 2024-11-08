@@ -61,6 +61,13 @@ const Menuitems = [
     icon: IconPoint,
     href: "/events",
     chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "News",
+    icon: IconPoint,
+    href: "/news",
+    chipColor: "secondary",
   }
 
 ];
