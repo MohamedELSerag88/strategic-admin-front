@@ -76,6 +76,13 @@ const Menuitems: (MenuitemsType | undefined)[] = [
     icon: IconPoint,
     href: "/consultations",
     chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Events",
+    icon: IconPoint,
+    href: "/events",
+    chipColor: "secondary",
   }
 ];
 

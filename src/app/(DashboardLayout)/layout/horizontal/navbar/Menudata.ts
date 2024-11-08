@@ -54,6 +54,14 @@ const Menuitems = [
     href: "/consultations",
     chipColor: "secondary",
   }
+  ,
+  {
+    id: uniqueId(),
+    title: "Events",
+    icon: IconPoint,
+    href: "/events",
+    chipColor: "secondary",
+  }
 
 ];
 export default Menuitems;
