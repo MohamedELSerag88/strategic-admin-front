@@ -90,6 +90,20 @@ const Menuitems: (MenuitemsType | undefined)[] = [
     icon: IconPoint,
     href: "/news",
     chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Studies",
+    icon: IconPoint,
+    href: "/studies",
+    chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Discussion Forums",
+    icon: IconPoint,
+    href: "/forums",
+    chipColor: "secondary",
   }
 ];
 

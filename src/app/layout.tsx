@@ -8,8 +8,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export const metadata = {
-  title: "Al Mina",
-  description: "Al Mina",
+  title: "SMC",
+  description: "SMC",
 };
 
 export default function RootLayout({
