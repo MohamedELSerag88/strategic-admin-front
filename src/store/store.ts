@@ -17,6 +17,7 @@ import NewsReducer from "./apps/news/NewsSlice";
 import StudyReducer from "./apps/studies/StudySlice";
 import MeasurementReducer from "./apps/measurements/MeasurementSlice";
 import ForumReducer from "./apps/forums/ForumSlice";
+import MemberShipReducer from "./apps/memberships/MemberShipSlice";
 
 const persistConfig = {
   key: "root",
@@ -38,6 +39,7 @@ export const store = configureStore({
     newsReducer: NewsReducer,
     studyReducer: StudyReducer,
     measurementReducer: MeasurementReducer,
+    membershipReducer: MemberShipReducer,
     forumReducer: ForumReducer
 
   },
@@ -60,6 +62,7 @@ const rootReducer = combineReducers({
   newsReducer: NewsReducer,
   studyReducer: StudyReducer,
   measurementReducer: MeasurementReducer,
+  membershipReducer: MemberShipReducer,
   forumReducer: ForumReducer
 });
 

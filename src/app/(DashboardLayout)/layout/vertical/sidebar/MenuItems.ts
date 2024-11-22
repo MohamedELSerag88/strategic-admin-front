@@ -104,6 +104,13 @@ const Menuitems: (MenuitemsType | undefined)[] = [
     icon: IconPoint,
     href: "/forums",
     chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Membership",
+    icon: IconPoint,
+    href: "/membership",
+    chipColor: "secondary",
   }
 ];
 

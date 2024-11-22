@@ -24,7 +24,9 @@ export default function Dashboard() {
     <PageContainer title="Dashboard" description="this is Dashboard">
       <Box mt={3}>
         <Grid container spacing={3}>
-          {/* column */}
+          <Grid item xs={12} lg={12}>
+            <TopCards />
+          </Grid>
 
         </Grid>
       </Box>
