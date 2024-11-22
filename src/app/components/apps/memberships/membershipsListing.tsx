@@ -25,7 +25,7 @@ import {
   addMembership,
   updateMembership,
   getMembership,
-} from "@/store/apps/memberships/MembershipSlice";
+} from "@/store/apps/memberships/MemberShipSlice";
 import { IconTrash } from "@tabler/icons-react";
 import { MembershipType } from "@/app/(DashboardLayout)/types/apps/Membership";
 import CustomFormLabel from "@/app/components/forms/theme-elements/CustomFormLabel";
