@@ -20,14 +20,11 @@ import {
   useTheme, TextareaAutosize,
 } from "@mui/material";
 import {
-  fetchMemberships,
-  DeleteMembership,
-  addMembership,
-  updateMembership,
-  getMembership,
-} from "@/store/apps/memberships/MemberShipSlice";
+  fetchConsultationRequests,
+  updateConsultationRequest,
+} from "@/store/apps/consultationRequests/ConsultationRequestSlice";
 import { IconTrash } from "@tabler/icons-react";
-import { MembershipType } from "@/app/(DashboardLayout)/types/apps/Membership";
+import { ConsultationRequestType } from "@/app/(DashboardLayout)/types/apps/ConsultationRequest";
 import CustomFormLabel from "@/app/components/forms/theme-elements/CustomFormLabel";
 import CustomTextField from "@/app/components/forms/theme-elements/CustomTextField";
 import CustomSelect from "../../forms/theme-elements/CustomSelect";
@@ -37,8 +34,10 @@ import CustomTable from "@/app/components/shared/CustomTable";
 import Loader from "@/app/components/shared/Loader";
 import countries from "@/app/components/shared/Countries";
 import Image from "next/image";
-const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
-  const rowsHeaderText = ["Id", "Name", "Type", "Duration","Job", "Nationality","Status",  "Resident Country", "Email", "phone", "Contact Type","Organization Name"];
+const ConsultationRequestsListing = ({ toggleModal, onActionButtonClick }) => {
+  const rowsHeaderText = ["Id", "Name", "Job Position", "Email","Phone", "Org Status","Org Name",  "Org Type",
+    "Establishment Date", "Ownership Type", "Means Type","Headquarter Country","Employees Number",
+    "External Offices Number","Annual Budget","Suffers Area"  ];
   const dispatch = useDispatch();
   const theme = useTheme();
   const [page, setPage] = React.useState(1);
@@ -61,42 +60,42 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
   });
 
 
-  const handleEditMembership = async (pageId: number) => {
+  const handleEditConsultationRequest = async (pageId: number) => {
     try {
       const response = await ApiService(
         "get",
-        "/admin/v1/memberships/" + pageId,
+        "/admin/v1/consultation-requests/" + pageId,
         null,
         {
           Authorization: "Bearer " + localStorage.getItem("token"),
         }
       );
-      editMembership(response.data);
+      editConsultationRequest(response.data);
     } catch (e) {
       console.log(e);
     }
   };
-  const editMembership = (membershipRow) => {
+  const editConsultationRequest = (consultationRequestRow) => {
     setEditValues({
-      id: membershipRow.id,
-      status: membershipRow.status,
+      id: consultationRequestRow.id,
+      status: consultationRequestRow.status,
     });
     setEditModal(!editModal);
   };
-  const handleUpdateMemberships = (e: any) => {
+  const handleUpdateConsultationRequests = (e: any) => {
     e.preventDefault();
     var payload = {
       id: editValues.id,
       status: editValues.status,
     };
-    dispatch(updateMembership(payload));
+    dispatch(updateConsultationRequest(payload));
 
     setEditModal(!editModal);
   };
 
   useEffect(() => {
     dispatch(
-      fetchMemberships(page, rowsPerPage, search)
+      fetchConsultationRequests(page, rowsPerPage, search)
     );
   }, [dispatch, page, rowsPerPage, search]);
 
@@ -112,14 +111,14 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
     }
     setPage(newPage);
     dispatch(
-        fetchMemberships(newPage, rowsPerPage, search)
+        fetchConsultationRequests(newPage, rowsPerPage, search)
     );
   };
 
   const handleStatusChange = (status: number | null) => {
     // @ts-ignore
     setStatusFilter(status);
-    dispatch(fetchMemberships(page, rowsPerPage , search));
+    dispatch(fetchConsultationRequests(page, rowsPerPage , search));
   };
 
 
@@ -127,7 +126,7 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     dispatch(
-        fetchMemberships(
+        fetchConsultationRequests(
         page,
         parseInt(event.target.value, 10),
         search
@@ -135,36 +134,36 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
     );
   };
 
-  const getVisibleMemberships = (
-    memberships: MembershipType[],
-    MembershipCount: number,
-    MembershipSearch: string,
+  const getVisibleConsultationRequests = (
+    consultationRequests: ConsultationRequestType[],
+    ConsultationRequestCount: number,
+    ConsultationRequestSearch: string,
     perPage: number,
     page: number
   ) => {
-    return memberships;
+    return consultationRequests;
   };
-  const handelSearchKey = (membershipSearch: string) => {
-    setSearch(membershipSearch);
+  const handelSearchKey = (consultationRequestSearch: string) => {
+    setSearch(consultationRequestSearch);
     dispatch(
-        fetchMemberships(page, rowsPerPage, membershipSearch)
+        fetchConsultationRequests(page, rowsPerPage, consultationRequestSearch)
     );
   };
-  const memberships = useSelector((state) =>
-    getVisibleMemberships(
-      state.membershipReducer.memberships,
-      state.membershipReducer.pageCount,
-      state.membershipReducer.membershipSearch,
+  const consultationRequests = useSelector((state) =>
+    getVisibleConsultationRequests(
+      state.consultationRequestReducer.consultationRequests,
+      state.consultationRequestReducer.pageCount,
+      state.consultationRequestReducer.consultationRequestSearch,
       rowsPerPage,
       page
     )
   );
   const totalRows = Math.ceil(
-    useSelector((state) => state.membershipReducer.pageCount / rowsPerPage)
+    useSelector((state) => state.consultationRequestReducer.pageCount / rowsPerPage)
   );
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - memberships?.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - consultationRequests?.length) : 0;
 
 
   return (
@@ -184,98 +183,127 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
 
         </Grid>
       </Box>
-      {memberships && memberships.length ? (
+      {consultationRequests && consultationRequests.length ? (
         <CustomTable
           rowsHeaderText={rowsHeaderText}
           totalRows={totalRows}
           handleChangePage={handleChangePage}
         >
-          {memberships.map((membership) => (
-            <TableRow key={membership.id} hover>
-              <TableCell>{membership.id}</TableCell>
+          {consultationRequests.map((consultationRequest) => (
+            <TableRow key={consultationRequest.id} hover>
+              <TableCell>{consultationRequest.id}</TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.name}
+                    {consultationRequest.name}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.type}
+                    {consultationRequest.job_position}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.duration}
+                    {consultationRequest.email}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.job}
+                    {consultationRequest.phone}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.nationality}
+                    {consultationRequest.org_status}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.status}
+                    {consultationRequest.org_name}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.resident_country}
+                    {consultationRequest.org_type}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.email}
+                    {consultationRequest.establishment_date}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.phone}
+                    {consultationRequest.ownership_type}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.contact_type}
+                    {consultationRequest.means_type}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.organization_name}
+                    {consultationRequest.headquarter_country}
                   </Typography>
                 </Box>
               </TableCell>
+              <TableCell>
+                <Box>
+                  <Typography variant="h6" fontWeight={600} noWrap>
+                    {consultationRequest.employees_number}
+                  </Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Box>
+                  <Typography variant="h6" fontWeight={600} noWrap>
+                    {consultationRequest.external_offices_number}
+                  </Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Box>
+                  <Typography variant="h6" fontWeight={600} noWrap>
+                    {consultationRequest.annual_budget}
+                  </Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Box>
+                  <Typography variant="h6" fontWeight={600} noWrap>
+                    {consultationRequest.suffers_area}
+                  </Typography>
+                </Box>
+              </TableCell>
+
 
 
 
               <TableCell align="right">
                 <Tooltip title="Edit">
-                  <IconButton onClick={(e) => handleEditMembership(membership.id)}>
+                  <IconButton onClick={(e) => handleEditConsultationRequest(consultationRequest.id)}>
                     <IconPencil size="18" stroke={1.3} />
                   </IconButton>
                 </Tooltip>
@@ -283,7 +311,7 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
             </TableRow>
           ))}
         </CustomTable>
-      ) : !memberships ? (
+      ) : !consultationRequests ? (
         <TableBody
           sx={{
             width: "100%",
@@ -306,7 +334,7 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
           }}
         >
           <Typography variant="h3" fontWeight={"400"}>
-            No Memberships
+            No ConsultationRequests
           </Typography>
         </TableBody>
       )}
@@ -318,11 +346,11 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
           aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" variant="h5">
-          {"Edit Membership"}
+          {"Edit ConsultationRequest"}
         </DialogTitle>
         <DialogContent>
           <Box mt={3}>
-            <form onSubmit={handleUpdateMemberships}>
+            <form onSubmit={handleUpdateConsultationRequests}>
               <Grid spacing={3} container>
 
 
@@ -366,4 +394,4 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
   );
 };
 
-export default MembershipsListing;
+export default ConsultationRequestsListing;

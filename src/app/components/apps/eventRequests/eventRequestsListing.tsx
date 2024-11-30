@@ -20,14 +20,14 @@ import {
   useTheme, TextareaAutosize,
 } from "@mui/material";
 import {
-  fetchMemberships,
-  DeleteMembership,
-  addMembership,
-  updateMembership,
-  getMembership,
-} from "@/store/apps/memberships/MemberShipSlice";
+  fetchEventRequests,
+  DeleteEventRequest,
+  addEventRequest,
+  updateEventRequest,
+  getEventRequest,
+} from "@/store/apps/eventRequests/EventRequestSlice";
 import { IconTrash } from "@tabler/icons-react";
-import { MembershipType } from "@/app/(DashboardLayout)/types/apps/Membership";
+import { EventRequestType } from "@/app/(DashboardLayout)/types/apps/EvenyRequest";
 import CustomFormLabel from "@/app/components/forms/theme-elements/CustomFormLabel";
 import CustomTextField from "@/app/components/forms/theme-elements/CustomTextField";
 import CustomSelect from "../../forms/theme-elements/CustomSelect";
@@ -37,8 +37,9 @@ import CustomTable from "@/app/components/shared/CustomTable";
 import Loader from "@/app/components/shared/Loader";
 import countries from "@/app/components/shared/Countries";
 import Image from "next/image";
-const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
-  const rowsHeaderText = ["Id", "Name", "Type", "Duration","Job", "Nationality","Status",  "Resident Country", "Email", "phone", "Contact Type","Organization Name"];
+const EventRequestsListing = ({ toggleModal, onActionButtonClick }) => {
+  const rowsHeaderText = ["Id", "Name", "Event", "Event Type","Event Presentation", "Job", "Org Type",
+    "Phone", "Org Name","Headquarter Country","Event Country","Event Date"  ];
   const dispatch = useDispatch();
   const theme = useTheme();
   const [page, setPage] = React.useState(1);
@@ -61,42 +62,42 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
   });
 
 
-  const handleEditMembership = async (pageId: number) => {
+  const handleEditEventRequest = async (pageId: number) => {
     try {
       const response = await ApiService(
         "get",
-        "/admin/v1/memberships/" + pageId,
+        "/admin/v1/event-requests/" + pageId,
         null,
         {
           Authorization: "Bearer " + localStorage.getItem("token"),
         }
       );
-      editMembership(response.data);
+      editEventRequest(response.data);
     } catch (e) {
       console.log(e);
     }
   };
-  const editMembership = (membershipRow) => {
+  const editEventRequest = (eventRequestRow) => {
     setEditValues({
-      id: membershipRow.id,
-      status: membershipRow.status,
+      id: eventRequestRow.id,
+      status: eventRequestRow.status,
     });
     setEditModal(!editModal);
   };
-  const handleUpdateMemberships = (e: any) => {
+  const handleUpdateEventRequests = (e: any) => {
     e.preventDefault();
     var payload = {
       id: editValues.id,
       status: editValues.status,
     };
-    dispatch(updateMembership(payload));
+    dispatch(updateEventRequest(payload));
 
     setEditModal(!editModal);
   };
 
   useEffect(() => {
     dispatch(
-      fetchMemberships(page, rowsPerPage, search)
+      fetchEventRequests(page, rowsPerPage, search)
     );
   }, [dispatch, page, rowsPerPage, search]);
 
@@ -112,14 +113,14 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
     }
     setPage(newPage);
     dispatch(
-        fetchMemberships(newPage, rowsPerPage, search)
+        fetchEventRequests(newPage, rowsPerPage, search)
     );
   };
 
   const handleStatusChange = (status: number | null) => {
     // @ts-ignore
     setStatusFilter(status);
-    dispatch(fetchMemberships(page, rowsPerPage , search));
+    dispatch(fetchEventRequests(page, rowsPerPage , search));
   };
 
 
@@ -127,7 +128,7 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     dispatch(
-        fetchMemberships(
+        fetchEventRequests(
         page,
         parseInt(event.target.value, 10),
         search
@@ -135,36 +136,36 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
     );
   };
 
-  const getVisibleMemberships = (
-    memberships: MembershipType[],
-    MembershipCount: number,
-    MembershipSearch: string,
+  const getVisibleEventRequests = (
+    eventRequests: EventRequestType[],
+    EventRequestCount: number,
+    EventRequestSearch: string,
     perPage: number,
     page: number
   ) => {
-    return memberships;
+    return eventRequests;
   };
-  const handelSearchKey = (membershipSearch: string) => {
-    setSearch(membershipSearch);
+  const handelSearchKey = (eventRequestSearch: string) => {
+    setSearch(eventRequestSearch);
     dispatch(
-        fetchMemberships(page, rowsPerPage, membershipSearch)
+        fetchEventRequests(page, rowsPerPage, eventRequestSearch)
     );
   };
-  const memberships = useSelector((state) =>
-    getVisibleMemberships(
-      state.membershipReducer.memberships,
-      state.membershipReducer.pageCount,
-      state.membershipReducer.membershipSearch,
+  const eventRequests = useSelector((state) =>
+    getVisibleEventRequests(
+      state.eventRequestReducer.eventRequests,
+      state.eventRequestReducer.pageCount,
+      state.eventRequestReducer.eventRequestSearch,
       rowsPerPage,
       page
     )
   );
   const totalRows = Math.ceil(
-    useSelector((state) => state.membershipReducer.pageCount / rowsPerPage)
+    useSelector((state) => state.eventRequestReducer.pageCount / rowsPerPage)
   );
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - memberships?.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - eventRequests?.length) : 0;
 
 
   return (
@@ -184,98 +185,95 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
 
         </Grid>
       </Box>
-      {memberships && memberships.length ? (
+      {eventRequests && eventRequests.length ? (
         <CustomTable
           rowsHeaderText={rowsHeaderText}
           totalRows={totalRows}
           handleChangePage={handleChangePage}
         >
-          {memberships.map((membership) => (
-            <TableRow key={membership.id} hover>
-              <TableCell>{membership.id}</TableCell>
+          {eventRequests.map((eventRequest) => (
+            <TableRow key={eventRequest.id} hover>
+              <TableCell>{eventRequest.id}</TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.name}
+                    {eventRequest.name}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.type}
+                    {eventRequest.event?.name}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.duration}
+                    {eventRequest.event_type}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.job}
+                    {eventRequest.event_presentation}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.nationality}
+                    {eventRequest.job}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.status}
+                    {eventRequest.org_type}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.resident_country}
+                    {eventRequest.phone}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.email}
+                    {eventRequest.org_name}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.phone}
+                    {eventRequest.headquarter_country}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.contact_type}
+                    {eventRequest.event_country}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
-                    {membership.organization_name}
+                    {eventRequest.event_date}
                   </Typography>
                 </Box>
               </TableCell>
-
-
-
               <TableCell align="right">
                 <Tooltip title="Edit">
-                  <IconButton onClick={(e) => handleEditMembership(membership.id)}>
+                  <IconButton onClick={(e) => handleEditEventRequest(eventRequest.id)}>
                     <IconPencil size="18" stroke={1.3} />
                   </IconButton>
                 </Tooltip>
@@ -283,7 +281,7 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
             </TableRow>
           ))}
         </CustomTable>
-      ) : !memberships ? (
+      ) : !eventRequests ? (
         <TableBody
           sx={{
             width: "100%",
@@ -306,7 +304,7 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
           }}
         >
           <Typography variant="h3" fontWeight={"400"}>
-            No Memberships
+            No EventRequests
           </Typography>
         </TableBody>
       )}
@@ -318,11 +316,11 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
           aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" variant="h5">
-          {"Edit Membership"}
+          {"Edit EventRequest"}
         </DialogTitle>
         <DialogContent>
           <Box mt={3}>
-            <form onSubmit={handleUpdateMemberships}>
+            <form onSubmit={handleUpdateEventRequests}>
               <Grid spacing={3} container>
 
 
@@ -366,4 +364,4 @@ const MembershipsListing = ({ toggleModal, onActionButtonClick }) => {
   );
 };
 
-export default MembershipsListing;
+export default EventRequestsListing;

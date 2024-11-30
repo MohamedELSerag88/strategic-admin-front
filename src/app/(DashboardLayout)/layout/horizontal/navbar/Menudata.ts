@@ -96,6 +96,20 @@ const Menuitems = [
     icon: IconPoint,
     href: "/membership",
     chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Consultation Requests",
+    icon: IconPoint,
+    href: "/consultation-request",
+    chipColor: "secondary",
+  },
+  {
+    id: uniqueId(),
+    title: "Event Requests",
+    icon: IconPoint,
+    href: "/event-request",
+    chipColor: "secondary",
   }
 
 ];

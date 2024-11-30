@@ -2,7 +2,7 @@
 
 import Breadcrumb from "@/app/(DashboardLayout)/layout/shared/breadcrumb/Breadcrumb";
 import PageContainer from "@/app/components/container/PageContainer";
-import ConsultationRequestsListing from "@/app/components/apps/consultationRequests/consultationRequestsListing";
+import ConsultationRequestsListing from "@/app/components/apps/eventRequests/eventRequestsListing";
 import ChildCard from "@/app/components/shared/ChildCard";
 import { useState } from "react";
 

@@ -18,6 +18,8 @@ import StudyReducer from "./apps/studies/StudySlice";
 import MeasurementReducer from "./apps/measurements/MeasurementSlice";
 import ForumReducer from "./apps/forums/ForumSlice";
 import MemberShipReducer from "./apps/memberships/MemberShipSlice";
+import ConsultationRequestReducer from "./apps/consultationRequests/ConsultationRequestSlice";
+import EventRequestReducer from "./apps/eventRequests/EventRequestSlice";
 
 const persistConfig = {
   key: "root",
@@ -40,7 +42,9 @@ export const store = configureStore({
     studyReducer: StudyReducer,
     measurementReducer: MeasurementReducer,
     membershipReducer: MemberShipReducer,
-    forumReducer: ForumReducer
+    forumReducer: ForumReducer,
+    consultationRequestReducer: ConsultationRequestReducer,
+    eventRequestReducer: EventRequestReducer
 
   },
   devTools: process.env.NODE_ENV !== "develop",
@@ -63,7 +67,9 @@ const rootReducer = combineReducers({
   studyReducer: StudyReducer,
   measurementReducer: MeasurementReducer,
   membershipReducer: MemberShipReducer,
-  forumReducer: ForumReducer
+  forumReducer: ForumReducer,
+  consultationRequestReducer: ConsultationRequestReducer,
+  eventRequestReducer: EventRequestReducer
 });
 
 export const persistor = persistStore(store);
