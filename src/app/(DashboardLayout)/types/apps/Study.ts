@@ -15,6 +15,7 @@ export interface StudyType {
   main_topics: string,
   summary: string,
   file: number,
+  status: number,
   related_studies: [],
   expert_id: number,
   related_services : [],

@@ -39,7 +39,7 @@ import countries from "@/app/components/shared/Countries";
 import Image from "next/image";
 
 const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
-  const rowsHeaderText = ["Id", "Title", "type", "Expert","Specialization" ];
+  const rowsHeaderText = ["Id", "Title","Status", "type", "Expert","Specialization" ];
   const dispatch = useDispatch();
   const theme = useTheme();
   const [page, setPage] = React.useState(1);
@@ -67,6 +67,7 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
     main_topics: "",
     summary: "",
     file: "",
+    status: "",
     study_ids: [],
     serviceable_data : []
   });
@@ -81,6 +82,7 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
     main_topics: "",
     summary: "",
     file: "",
+    status: "",
     study_ids: [],
     serviceable_data : []
   });
@@ -130,6 +132,7 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
       main_topics: studyRow.main_topics,
       summary: studyRow.summary,
       file: studyRow.file,
+      status: studyRow.status,
       study_ids: studyRow.study_ids,
       serviceable_data : studyRow.related_services,
     });
@@ -148,6 +151,7 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
       main_topics: editValues.main_topics,
       summary: editValues.summary,
       file: editValues.file,
+      status: editValues.status,
       study_ids: editValues.study_ids,
       serviceable_data : editValues.serviceable_data,
     };
@@ -308,6 +312,13 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
               <TableCell>
                 <Box>
                   <Typography variant="h6" fontWeight={600} noWrap>
+                    {study.status ? "Published": "UnPublished"}
+                  </Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Box>
+                  <Typography variant="h6" fontWeight={600} noWrap>
                     {study.type}
                   </Typography>
                 </Box>
@@ -398,6 +409,21 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
                           setValues({...values, title: e.target.value})
                       }
                   />
+                </Grid>
+                {/* Status */}
+                <Grid item xs={12} lg={6}>
+                  <FormLabel>Status </FormLabel>
+                  <CustomSelect
+                      id="expert_id"
+                      value={values.status}
+                      onChange={(e) =>
+                          setValues({ ...values, status: e.target.value })
+                      }
+                      fullWidth
+                  >
+                        <MenuItem key="Published" value="1">Published</MenuItem>
+                        <MenuItem key="UnPublished" value="0">UnPublished</MenuItem>
+                  </CustomSelect>
                 </Grid>
                 {/* Type */}
                 <Grid item xs={12} lg={6}>
@@ -614,6 +640,21 @@ const StudiesListing = ({ toggleModal, onActionButtonClick }) => {
                           setEditValues({...editValues, title: e.target.value})
                       }
                   />
+                </Grid>
+                {/* Status */}
+                <Grid item xs={12} lg={6}>
+                  <FormLabel>Status </FormLabel>
+                  <CustomSelect
+                      id="expert_id"
+                      value={editValues.status}
+                      onChange={(e) =>
+                          setEditValues({ ...editValues, status: e.target.value })
+                      }
+                      fullWidth
+                  >
+                    <MenuItem key="Published" value="1">Published</MenuItem>
+                    <MenuItem key="UnPublished" value="0">UnPublished</MenuItem>
+                  </CustomSelect>
                 </Grid>
                 {/* Type */}
                 <Grid item xs={12} lg={6}>
